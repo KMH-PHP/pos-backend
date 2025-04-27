@@ -6,14 +6,22 @@ const config = require('./config/config');
 const globalErrorHandler = require('./middlewares/globalErrorHandler');
 const createHttpError = require('http-errors');
 const cookieParser = require('cookie-parser');
+const cors = require("cors");
 const app = express();
 
  const PORT = config.port;
  connectDB();
 
  //middlewares
+ app.use(cors(
+   {
+      credentials : true,
+      origin: ["http://localhost:5173"]
+   }
+))
 app.use(express.json()); // parse incoming request in json format
 app.use(cookieParser()); // parse cookies
+
 
  //root endpoint
  app.get("/", (req, res) => {
@@ -27,6 +35,8 @@ app.use(cookieParser()); // parse cookies
  app.use("/api/user", require("./routes/userRoute"));
  app.use("/api/order", require("./routes/orderRoute"));
  app.use("/api/table", require("./routes/tableRoute"));
+
+ app.use("/api/payment", require("./routes/paymentRoute"));
 
 
  //global error handler

@@ -40,7 +40,9 @@ const getOrderById = async (req, res, next) => {
 
 const getOrders = async (req, res, next) => {
     try{
-        const orders = await Order.find();
+        const orders = await Order.find().populate("table"
+            // { path: "table" , select: "tableNo" }
+        );
         res.status(200).json({ data: orders });
 
     }catch(error){
@@ -51,8 +53,8 @@ const getOrders = async (req, res, next) => {
 const updateOrder = async (req, res, next) => {
     try{
             const { orderStatus } = req.body;
-
             const { id } = req.params;
+            
             if(!mongoose.Types.ObjectId.isValid(id)){
                 const error = createHttpError(404, "Invalid id!");
                 return next(error);
